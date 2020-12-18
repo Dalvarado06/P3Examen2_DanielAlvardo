@@ -40,12 +40,12 @@ public:
     
     virtual ~ManejadorRelaciones();
     
-    void guardarRelaciones();
+    void guardarRelaciones(vector<Relacion*>&);
     
     vector<Relacion*> leerArchivos();
 
 private:
-    vector<Relacion*> listaRelaciones;
+   
 };
 
 #endif /* MANEJADORRELACIONES_H */

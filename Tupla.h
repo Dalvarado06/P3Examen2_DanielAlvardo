@@ -40,6 +40,8 @@ public:
     
     void setDatos(vector<string>);
     
+    int getId();
+    
 
 private:
     

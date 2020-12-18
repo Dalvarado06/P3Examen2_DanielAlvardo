@@ -26,3 +26,18 @@ Relacion::Relacion(const Relacion& orig) {
 Relacion::~Relacion() {
 }
 
+void Relacion::setHeaders(vector<string> headers){
+    encabezados = headers;
+}
+
+string Relacion::getNombre(){
+    return nombre;
+}
+
+vector<Tupla*> Relacion::getDatos(){
+    return listaDatos;
+}
+
+vector<string> Relacion::getHeaders(){
+    return encabezados;
+}

@@ -22,7 +22,7 @@ ManejadorRelaciones::ManejadorRelaciones(const ManejadorRelaciones& orig) {
 ManejadorRelaciones::~ManejadorRelaciones() {
 }
 
-void ManejadorRelaciones::guardarRelaciones() {
+void ManejadorRelaciones::guardarRelaciones(vector<Relacion*> &listaRelaciones) {
 
     ofstream encabezados;
 
@@ -102,7 +102,7 @@ vector<Relacion*> ManejadorRelaciones::leerArchivos() {
 
         encabezados >> nombreArch;
 
-        getline(encabezados, headers);
+        encabezados >> headers;
 
         vector<string> listaHeaders;
         string buffer = "";
@@ -127,7 +127,7 @@ vector<Relacion*> ManejadorRelaciones::leerArchivos() {
 
         //lectura del archivo que contiene los datos
         Relacion* rel = new Relacion(nombreArch);
-
+        rel->setHeaders(listaHeaders);
         nombreArch += ".txt";
         ifstream relacion;
         relacion.open(nombreArch);
@@ -145,11 +145,12 @@ vector<Relacion*> ManejadorRelaciones::leerArchivos() {
                 int id = 0;
 
                 relacion >> id;
+                temporal->setIdentificacion(id);
 
                 string buffer = "";
                 string dato = "";
 
-                getline(relacion, buffer);
+                relacion >> buffer;
 
                 for (int i = 0; i < buffer.size(); i++) {
 

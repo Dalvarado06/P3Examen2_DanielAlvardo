@@ -36,7 +36,13 @@ public:
     virtual ~Relacion();
     
     //gets y sets
+    void setHeaders(vector<string>);
     
+    string getNombre();
+    
+    vector<Tupla*> getDatos();
+    
+    vector<string> getHeaders();
     
 
 private:
