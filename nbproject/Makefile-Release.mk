@@ -35,7 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/P3Examen2_DanielAlvarado.o
+	${OBJECTDIR}/ManejadorRelaciones.o \
+	${OBJECTDIR}/P3Examen2_DanielAlvarado.o \
+	${OBJECTDIR}/Relacion.o \
+	${OBJECTDIR}/Tupla.o
 
 
 # C Compiler Flags
@@ -62,10 +65,25 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/p3examen2_danielalvarado.exe: ${OBJEC
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/p3examen2_danielalvarado ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/ManejadorRelaciones.o: ManejadorRelaciones.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ManejadorRelaciones.o ManejadorRelaciones.cpp
+
 ${OBJECTDIR}/P3Examen2_DanielAlvarado.o: P3Examen2_DanielAlvarado.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/P3Examen2_DanielAlvarado.o P3Examen2_DanielAlvarado.cpp
+
+${OBJECTDIR}/Relacion.o: Relacion.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Relacion.o Relacion.cpp
+
+${OBJECTDIR}/Tupla.o: Tupla.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Tupla.o Tupla.cpp
 
 # Subprojects
 .build-subprojects:

@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>ManejadorRelaciones.h</itemPath>
+      <itemPath>Relacion.h</itemPath>
+      <itemPath>Tupla.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -12,7 +15,10 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>ManejadorRelaciones.cpp</itemPath>
       <itemPath>P3Examen2_DanielAlvarado.cpp</itemPath>
+      <itemPath>Relacion.cpp</itemPath>
+      <itemPath>Tupla.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -36,7 +42,19 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="ManejadorRelaciones.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ManejadorRelaciones.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="P3Examen2_DanielAlvarado.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Relacion.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Relacion.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Tupla.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Tupla.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -59,7 +77,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="ManejadorRelaciones.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ManejadorRelaciones.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="P3Examen2_DanielAlvarado.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Relacion.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Relacion.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Tupla.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Tupla.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
