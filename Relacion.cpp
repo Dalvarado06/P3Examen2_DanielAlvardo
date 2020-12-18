@@ -24,6 +24,7 @@ Relacion::Relacion(const Relacion& orig) {
 }
 
 Relacion::~Relacion() {
+    freeVector();
 }
 
 void Relacion::setHeaders(vector<string> headers){
@@ -40,4 +41,19 @@ vector<Tupla*> Relacion::getDatos(){
 
 vector<string> Relacion::getHeaders(){
     return encabezados;
+}
+
+void Relacion::addTupla(Tupla* temp){
+    listaDatos.push_back(temp);
+}
+
+void Relacion::freeVector(){
+    
+    for(int i = 0; i < listaDatos.size(); i++){
+        delete listaDatos[i];
+    }
+}
+
+void Relacion::setNombre(string nombre){
+    this->nombre = nombre;
 }

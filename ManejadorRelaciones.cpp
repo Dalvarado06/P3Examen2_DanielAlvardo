@@ -28,12 +28,20 @@ void ManejadorRelaciones::guardarRelaciones(vector<Relacion*> &listaRelaciones) 
 
     encabezados.open("EncabezadosArchivos.txt", ofstream::out | ofstream::trunc);
 
+    if (encabezados.is_open()) {
+        encabezados << listaRelaciones.size() << endl;
+    }
+    
+    //pasa por las relaciones guardando encabezados en un archivo separado
+    // y guarda sus tuplas en un txt aparte
     for (int i = 0; i < listaRelaciones.size(); i++) {
+
 
         string arch = ".txt";
 
         Relacion* relacion = listaRelaciones[i];
 
+        //guarda encabezados
         if (encabezados.is_open()) {
 
             encabezados << relacion->nombre << endl;
@@ -47,7 +55,7 @@ void ManejadorRelaciones::guardarRelaciones(vector<Relacion*> &listaRelaciones) 
 
         }
 
-
+        //guarda las tuplas en un txt
         string nombre = "";
         nombre = relacion->nombre;
         nombre += arch;
@@ -56,6 +64,7 @@ void ManejadorRelaciones::guardarRelaciones(vector<Relacion*> &listaRelaciones) 
         archivo.open(nombre, ofstream::out | ofstream::trunc);
 
         if (archivo.is_open()) {
+
 
             archivo << relacion->listaDatos.size() << endl;
 
@@ -69,7 +78,7 @@ void ManejadorRelaciones::guardarRelaciones(vector<Relacion*> &listaRelaciones) 
 
                 for (int j = 0; j < textos.size(); j++) {
 
-                    archivo << textos[i] << ",";
+                    archivo << textos[j] << ",";
                 }
 
                 archivo << endl;
@@ -97,86 +106,93 @@ vector<Relacion*> ManejadorRelaciones::leerArchivos() {
 
     if (encabezados.is_open()) {
 
-        string nombreArch = "";
-        string headers = "";
+        int size = 0;
+        encabezados >> size;
+        
+        //recorre un ciclo for con la cantidad contada de Relaciones
+        for (int k = 0; k < size; k++) {
 
-        encabezados >> nombreArch;
+            string nombreArch = "";
+            string headers = "";
 
-        encabezados >> headers;
+            encabezados >> nombreArch;
 
-        vector<string> listaHeaders;
-        string buffer = "";
+            encabezados >> headers;
 
-        //recorre el string para guardar los encabezados en el vector
-        for (int i = 0; i < headers.length(); i++) {
+            vector<string> listaHeaders;
+            string buffer = "";
 
-            if (headers[i] == ',') {
+            //recorre el string para guardar los encabezados en el vector
+            for (int i = 0; i < headers.length(); i++) {
 
-                listaHeaders.push_back(buffer);
-                buffer.clear();
+                if (headers[i] == ',') {
 
-            } else if (i == headers.length() - 1) {
+                    listaHeaders.push_back(buffer);
+                    buffer.clear();
 
-                listaHeaders.push_back(buffer);
-                buffer.clear();
+                } else if (i == headers.length() - 1) {
 
-            } else {
-                buffer += headers[i];
+                    listaHeaders.push_back(buffer);
+                    buffer.clear();
+
+                } else {
+                    buffer += headers[i];
+                }
             }
-        }
 
-        //lectura del archivo que contiene los datos
-        Relacion* rel = new Relacion(nombreArch);
-        rel->setHeaders(listaHeaders);
-        nombreArch += ".txt";
-        ifstream relacion;
-        relacion.open(nombreArch);
+            //lectura del archivo que contiene los datos
+            Relacion* rel = new Relacion(nombreArch);
+            rel->setHeaders(listaHeaders);
+            nombreArch += ".txt";
+            ifstream relacion;
+            relacion.open(nombreArch);
 
-        if (relacion.is_open()) {
+            if (relacion.is_open()) {
 
-            int size = 0;
+                int size = 0;
 
-            relacion >> size;
+                relacion >> size;
 
-            for (int k = 0; k < size; k++) {
+                for (int k = 0; k < size; k++) {
 
-                Tupla* temporal = new Tupla();
+                    Tupla* temporal = new Tupla();
 
-                int id = 0;
+                    int id = 0;
 
-                relacion >> id;
-                temporal->setIdentificacion(id);
+                    relacion >> id;
+                    temporal->setIdentificacion(id);
 
-                string buffer = "";
-                string dato = "";
+                    string buffer = "";
+                    string dato = "";
 
-                relacion >> buffer;
+                    relacion >> buffer;
+                    
+                    //ciclo for que divide los datos y los almacena en el vector
+                    for (int i = 0; i < buffer.size(); i++) {
 
-                for (int i = 0; i < buffer.size(); i++) {
+                        if (buffer[i] == ',') {
 
-                    if (buffer[i] == ',') {
+                            temporal->addDato(dato);
+                            dato.clear();
 
-                        temporal->getDatos().push_back(dato);
-                        dato.clear();
+                        } else if (i == buffer.length() - 1) {
 
-                    } else if (i == buffer.length() - 1) {
+                            temporal->addDato(dato);
+                            dato.clear();
 
-                        temporal->getDatos().push_back(dato);
-                        dato.clear();
-
-                    } else {
-                        dato += buffer[i];
+                        } else {
+                            dato += buffer[i];
+                        }
                     }
+
+                    rel->listaDatos.push_back(temporal);
                 }
 
-                rel->listaDatos.push_back(temporal);
+                listaDeRelaciones.push_back(rel);
+
             }
-            
-            listaDeRelaciones.push_back(rel);
-
         }
-
     }
-    
+
     return listaDeRelaciones;
 }

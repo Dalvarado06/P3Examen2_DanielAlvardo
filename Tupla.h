@@ -42,6 +42,8 @@ public:
     
     int getId();
     
+    void addDato(string);
+    
 
 private:
     

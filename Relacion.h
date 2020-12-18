@@ -21,6 +21,9 @@ using std::vector;
 using std::string;
 
 #include "Tupla.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 class ManejadorRelaciones;
 
@@ -44,6 +47,11 @@ public:
     
     vector<string> getHeaders();
     
+    void addTupla(Tupla* temp);
+    
+    void freeVector();
+    
+    void setNombre(string);
 
 private:
     

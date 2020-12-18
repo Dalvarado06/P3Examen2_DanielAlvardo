@@ -38,3 +38,7 @@ vector<string> Tupla::getDatos(){
 int Tupla::getId(){
     return identificacion;
 }
+
+void Tupla::addDato(string data){
+    datos.push_back(data);
+}

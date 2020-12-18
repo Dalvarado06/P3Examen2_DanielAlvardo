@@ -23,6 +23,7 @@
 int menu();
 void printRelacion(Relacion*&);
 void freeVector(vector<Relacion*>&);
+int randNumberTupla();
 
 using namespace std;
 
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
         switch ((opcion = menu())) {
 
             case 1:
-            {
+            { 
                 cout << "Crear Relacion" << endl << endl;
 
                 string nombre = "";
@@ -54,6 +55,7 @@ int main(int argc, char** argv) {
 
                 int flag = 1;
 
+                //ciclo while permite ingresar headers sin limite
                 while (flag == 1) {
 
                     string encabezado = "";
@@ -74,16 +76,20 @@ int main(int argc, char** argv) {
                         cout << endl << endl;
                     }
                 }
-                
-                Relacion* datos = new Relacion(nombre);
+
+                //crea la relacion
+                Relacion* datos = new Relacion();
+                datos->setNombre(nombre);
                 datos->setHeaders(encabezados);
-                
+
                 //el manejador lee todos los archivos agrega 
                 listaRelaciones.clear();
                 listaRelaciones = manager.leerArchivos();
+
+                //guarda en la lista y manda a llamar el metodo de guardar en txt
                 listaRelaciones.push_back(datos);
-                manager.guardarRelaciones(listaRelaciones);   
-                
+                manager.guardarRelaciones(listaRelaciones);
+
                 cout << "La Relacion se ha creado con exito" << endl << endl;
 
                 break;
@@ -92,52 +98,142 @@ int main(int argc, char** argv) {
             case 2:
             {
                 cout << "Ver relaciones" << endl << endl;
-                
+
                 listaRelaciones = manager.leerArchivos();
-                
-                if(listaRelaciones.empty()){
+
+                if (listaRelaciones.empty()) {
                     cout << "La lista de relaciones esta vacia!" << endl << endl;
-                
-                }else{
-                    
+
+                } else {
+
+                    //lista las relaciones existentes
+
                     cout << "Esta es la lista: " << endl;
-                    for(int i = 0; i < listaRelaciones.size(); i++){
-                        cout << i+1 << " " <<listaRelaciones[i]->getNombre()
+                    for (int i = 0; i < listaRelaciones.size(); i++) {
+                        cout << i + 1 << " " << listaRelaciones[i]->getNombre()
                                 << endl;
                     }
-                    
+
                     cout << endl << endl;
-                    
+
                     int index = -1;
-                    
+
+                    //valida el indice ingresado
                     cout << "Ingrese el indice de la relacion a mostrar: ";
                     cin >> index;
                     cout << endl << endl;
-                    
-                    while(index < 0){
+
+                    while (index < 0) {
                         cout << "Ingrese un indice mayor a 0: ";
-                        cin >> index; 
+                        cin >> index;
                         cout << endl << endl;
                     }
-                    
-                    
-                    printRelacion(listaRelaciones[index-1]);
-                    
-                    
+
+
+                    printRelacion(listaRelaciones[index - 1]);
+
+
                 }
-                
+
                 break;
 
             }
             case 3:
             {
 
+                cout << "Crear Tupla" << endl << endl;
+
+                if (listaRelaciones.empty()) {
+                    cout << "No hay relaciones en la lista!!" << endl << endl;
+                } else {
+
+                    int index = -1;
+                    
+                    //muestra la lista de relaciones
+                    cout << "Esta es la lista de relaciones: " << endl;
+                    for (int i = 0; i < listaRelaciones.size(); i++) {
+                        cout << i + 1 << ". " << listaRelaciones[i]->getNombre() << endl;
+                    }
+
+                    cout << endl << endl;
+                    
+                    //valida el indice ingresado
+                    cout << "Ingrese en cual relacion desea insertar la tupla: ";
+                    cin >> index;
+                    cout << endl;
+
+                    while (index < 0) {
+                        cout << "Ingrese en cual relacion desea insertar la tupla: ";
+                        cin >> index;
+                        cout << endl;
+                    }
+                    
+                    //manager lee el archivo para actualizar la lista
+                    listaRelaciones = manager.leerArchivos();
+
+                    int id = randNumberTupla();
+                    
+                    //metodo que verifica que no se repitan id mediante un ciclo bool
+                    bool flag = false;
+                    Relacion* relacion = listaRelaciones[index - 1];
+
+
+                    while (!flag) {
+
+                        flag = true;
+
+                        for (int i = 0; i < relacion->getDatos().size(); i++) {
+
+                            Tupla* temp = relacion->getDatos().at(i);
+
+                            if (temp->getId() == id) {
+                                flag = false;
+                            }
+                        }
+
+                        if (!flag) {
+                            id = randNumberTupla();
+                        }
+
+                    }
+                    
+                    //creacion de la nueva tupla
+                    Tupla* newTupla = new Tupla();
+                    newTupla->setIdentificacion(id);
+
+                    string data = "";
+
+                    //pido los nuevos datos de la tupla
+                    for (int i = 0; i < relacion->getHeaders().size(); i++) {
+
+                        cout << "Ingrese el valor para " << relacion->getHeaders().at(i)
+                                << " : ";
+                        cin >> data;
+
+                        cout << endl << endl;
+
+                        newTupla->addDato(data);
+                        data = "";
+                    }
+                    
+                    //agrega la tupla al vector
+                    listaRelaciones[index - 1]->addTupla(newTupla);
+                    printRelacion(listaRelaciones[index - 1]);
+                    
+                    //llama al metodo de guardar que actualiza los txt
+                    manager.guardarRelaciones(listaRelaciones);
+
+                    cout << "La nueva tupla ha sido agregada con exito! "
+                            << endl << endl;
+
+                }
                 break;
 
             }
             case 4:
             {
-                //freeVector(listaRelaciones);
+                //libera el vector antes que termine el programa
+                freeVector(listaRelaciones);
                 cout << "Ha salido del programa..." << endl << endl;
                 break;
             }
@@ -146,6 +242,8 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+//menu que valida las entradas por el usuario
 
 int menu() {
 
@@ -169,54 +267,74 @@ int menu() {
 }
 
 //imprime en consola la informacion de una relacion
-void printRelacion(Relacion* &relacion){
-    
+
+void printRelacion(Relacion* &relacion) {
+
     cout << "Estado de la Relacion: " << relacion->getNombre() << endl;
-    
+
     //imprime los headers
-    for(int i = 0; i < relacion->getHeaders().size(); i++){
-        
-        if(i==0){
+    for (int i = 0; i < relacion->getHeaders().size(); i++) {
+
+        if (i == 0) {
             cout << "ID " << "  \t" << relacion->getHeaders().at(i) << "  \t";
-           
-        }else{
-            cout << relacion->getHeaders().at(i) << "  \t"; 
+
+        } else {
+            cout << relacion->getHeaders().at(i) << "  \t";
         }
     }
-    
+
     cout << endl;
-    
-    
+
+
     //imprime todas las tuplas
-    for(int i = 0; i < relacion->getDatos().size(); i++){
-        
+    for (int i = 0; i < relacion->getDatos().size(); i++) {
+
         Tupla* temporal = relacion->getDatos().at(i);
-        
+
         cout << temporal->getId() << "  \t";
-        
-        for(int j = 0; j < temporal->getDatos().size(); i++){
-            
-            cout << temporal->getDatos().at(j) << "  \t";
+
+        for (int j = 0; j < temporal->getDatos().size(); j++) {
+
+            cout << temporal->getDatos().at(j) << "   \t";
         }
-        
+
         cout << endl;
     }
-    
-    
+
+    cout << endl << endl;
+
+
 }
 
-void freeVector(vector<Relacion*> &listaRelaciones){
-    
-    if(!listaRelaciones.empty()){
-        
-        for(int i = 0; listaRelaciones.size(); i++){
-            
-            if(listaRelaciones[i] != NULL){
-                delete listaRelaciones[i];
-            }
+//ciclo que libera la memoria dinamica de las relaciones
+
+void freeVector(vector<Relacion*> &listaRelaciones) {
+
+    if (!listaRelaciones.empty()) {
+
+        for (int i = listaRelaciones.size() - 1; i >= 0; i--) {
+
+            delete listaRelaciones[i];
         }
-        
-        
+
+
         listaRelaciones.clear();
     }
+}
+
+//funcion con rand que retorna un numero aleatorio entre 1000 a 9000
+
+int randNumberTupla() {
+
+    srand(time(0));
+
+    int num = 0;
+
+    num = 1 + (rand() % 9999);
+
+    while (num < 1000) {
+        num = 1 + (rand() % 9999);
+    }
+
+    return num;
 }
